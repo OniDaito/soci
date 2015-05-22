@@ -77,6 +77,12 @@ private:
 
 // Automatically create use_type from a type_conversion
 
+// Clang gets upset at uninitialized variables in templates
+#ifdef __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wuninitialized"
+#endif
+
 template <typename T>
 class conversion_use_type
     : private details::base_value_holder<T>,
@@ -162,6 +168,11 @@ private:
 
     bool readOnly_;
 };
+
+#ifdef __clang__
+#pragma clang diagnostic pop
+#endif
+
 
 // this class is used to ensure correct order of construction
 // of vector based into_type and use_type elements that use type_conversion
